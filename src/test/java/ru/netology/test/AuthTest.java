@@ -57,9 +57,20 @@ public class AuthTest {
     @DisplayName("Should not login if verification code is invalid")
     void shouldNotEnterWhenInvalidCode() {
         val loginPage = new LoginPage();
-        val authInfo = DataHelper.getAuthInfo();
+        val authInfo = getAuthInfo();
         val verificationPage = loginPage.validAuth(authInfo);
-        val verificationCode = DataHelper.getInvalidVerificationCode();
+        val verificationCode = getInvalidVerificationCode();
         verificationPage.invalidVerify(verificationCode);
+    }
+
+    @Test
+    @DisplayName("Should not login if password incorrect 3 times in a row")
+    void shouldNotEnterWhenInvalidPasswordThreeTimes() {
+        val loginPage = new LoginPage();
+        val authInfo = getInvalidPasswordForAuth();
+        loginPage.invalidAuth(authInfo);
+        val invalidPassword = invalidPassword();
+        loginPage.sendInvalidPassword(invalidPassword);
+        loginPage.sendInvalidPasswordThreeTimes(invalidPassword);
     }
 }

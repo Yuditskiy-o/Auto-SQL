@@ -25,4 +25,15 @@ public class LoginPage {
         loginButton.click();
         errorNotification.shouldBe(Condition.visible);
     }
+
+    public void sendInvalidPassword(String password) {
+        passwordField.setValue(password);
+        loginButton.click();
+    }
+
+    public void sendInvalidPasswordThreeTimes(String password) {
+        passwordField.setValue(password);
+        loginButton.click();
+        loginButton.shouldBe(Condition.disabled);
+    }
 }

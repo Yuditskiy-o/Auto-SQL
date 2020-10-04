@@ -40,6 +40,10 @@ public class DataHelper {
         String code;
     }
 
+    public static String invalidPassword() {
+        return "fsdf43f4323f34gf3";
+    }
+
     public static String getInvalidVerificationCode() {
         return "765756756756756";
     }
