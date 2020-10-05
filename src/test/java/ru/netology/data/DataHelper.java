@@ -19,14 +19,29 @@ public class DataHelper {
         String code;
     }
 
-    public static String getVerificationCodeForUser() throws SQLException {
-        val verificationCode = "SELECT code FROM auth_codes WHERE created = (SELECT MAX(created) FROM auth_codes);";
-
+    public static String getVerificationCodeForUser(String login) throws SQLException {
+        String userId = null;
+        val searchForId = "SELECT id FROM users WHERE login = ?;";
         try (
                 val conn = DriverManager.getConnection(url, user, password);
-                val countStmt = conn.createStatement()
+                val idStmt = conn.prepareStatement(searchForId)
         ) {
-            try (val rs = countStmt.executeQuery(verificationCode)) {
+            idStmt.setString(1, login);
+            try (val rs = idStmt.executeQuery()) {
+                if (rs.next()) {
+                    // выборка значения по индексу столбца (нумерация с 1)
+                    userId = rs.getString("id");
+                }
+            }
+        }
+
+        val verificationCode = "SELECT code FROM auth_codes WHERE user_id = ? ORDER BY created DESC LIMIT 1;";
+        try (
+                val conn = DriverManager.getConnection(url, user, password);
+                val codeStmt = conn.prepareStatement(verificationCode)
+        ) {
+            codeStmt.setString(1, userId);
+            try (val rs = codeStmt.executeQuery()) {
                 if (rs.next()) {
                     // выборка значения по индексу столбца (нумерация с 1)
                     return rs.getString("code");

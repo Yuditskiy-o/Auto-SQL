@@ -11,7 +11,7 @@ import ru.netology.pages.LoginPage;
 import java.sql.SQLException;
 
 import static com.codeborne.selenide.Selenide.open;
-import static ru.netology.data.DataHelper.*;
+import static ru.netology.data.DataHelper.getVerificationCodeForUser;
 
 public class AuthTest {
 
@@ -33,7 +33,7 @@ public class AuthTest {
         val login = "vasya";
         val password = "qwerty123";
         val verificationPage = loginPage.validAuth(login, password);
-        val verificationCode = getVerificationCodeForUser();
+        val verificationCode = getVerificationCodeForUser(login);
         val dashboardPage = verificationPage.validVerify(verificationCode);
         dashboardPage.dashboardPage();
     }
