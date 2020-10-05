@@ -2,7 +2,6 @@ package ru.netology.pages;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
-import ru.netology.data.DataHelper;
 
 import static com.codeborne.selenide.Selenide.$;
 
@@ -12,16 +11,16 @@ public class LoginPage {
     private final SelenideElement loginButton = $("[data-test-id=action-login]");
     private final SelenideElement errorNotification = $("[data-test-id='error-notification']");
 
-    public VerificationPage validAuth(DataHelper.AuthInfo info) {
-        loginField.setValue(info.getLogin());
-        passwordField.setValue(info.getPassword());
+    public VerificationPage validAuth(String login, String password) {
+        loginField.setValue(login);
+        passwordField.setValue(password);
         loginButton.click();
         return new VerificationPage();
     }
 
-    public void invalidAuth(DataHelper.AuthInfo info) {
-        loginField.setValue(info.getLogin());
-        passwordField.setValue(info.getPassword());
+    public void invalidAuth(String login, String password) {
+        loginField.setValue(login);
+        passwordField.setValue(password);
         loginButton.click();
         errorNotification.shouldBe(Condition.visible);
     }

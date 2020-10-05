@@ -30,9 +30,10 @@ public class AuthTest {
     @DisplayName("Should login successfully with provided data")
     void shouldEnterWhenValidData() throws SQLException {
         val loginPage = new LoginPage();
-        val authInfo = getAuthInfo();
-        val verificationPage = loginPage.validAuth(authInfo);
-        val verificationCode = getVerificationCodeForVasya();
+        val login = "vasya";
+        val password = "qwerty123";
+        val verificationPage = loginPage.validAuth(login, password);
+        val verificationCode = getVerificationCodeForUser();
         val dashboardPage = verificationPage.validVerify(verificationCode);
         dashboardPage.dashboardPage();
     }
@@ -41,25 +42,28 @@ public class AuthTest {
     @DisplayName("Should not login if username is invalid")
     void shouldNotEnterWhenInvalidLogin() {
         val loginPage = new LoginPage();
-        val authInfo = getInvalidLoginForAuth();
-        loginPage.invalidAuth(authInfo);
+        val login = "petya";
+        val password = "qwerty123";
+        loginPage.invalidAuth(login, password);
     }
 
     @Test
     @DisplayName("Should not login if password is invalid")
     void shouldNotEnterWhenInvalidPassword() {
         val loginPage = new LoginPage();
-        val authInfo = getInvalidPasswordForAuth();
-        loginPage.invalidAuth(authInfo);
+        val login = "vasya";
+        val password = "423fsf3f3";
+        loginPage.invalidAuth(login, password);
     }
 
     @Test
     @DisplayName("Should not login if verification code is invalid")
     void shouldNotEnterWhenInvalidCode() {
         val loginPage = new LoginPage();
-        val authInfo = getAuthInfo();
-        val verificationPage = loginPage.validAuth(authInfo);
-        val verificationCode = getInvalidVerificationCode();
+        val login = "vasya";
+        val password = "qwerty123";
+        val verificationPage = loginPage.validAuth(login, password);
+        val verificationCode = "765756756756756";
         verificationPage.invalidVerify(verificationCode);
     }
 
@@ -67,10 +71,10 @@ public class AuthTest {
     @DisplayName("Should not login if password incorrect 3 times in a row")
     void shouldNotEnterWhenInvalidPasswordThreeTimes() {
         val loginPage = new LoginPage();
-        val authInfo = getInvalidPasswordForAuth();
-        loginPage.invalidAuth(authInfo);
-        val invalidPassword = invalidPassword();
-        loginPage.sendInvalidPasswordSecondTime(invalidPassword);
-        loginPage.sendInvalidPasswordThirdTime(invalidPassword);
+        val login = "vasya";
+        val password = "fsdf43f4323f34gf3";
+        loginPage.invalidAuth(login, password);
+        loginPage.sendInvalidPasswordSecondTime(password);
+        loginPage.sendInvalidPasswordThirdTime(password);
     }
 }

@@ -1,6 +1,5 @@
 package ru.netology.data;
 
-import com.github.javafaker.Faker;
 import lombok.NoArgsConstructor;
 import lombok.Value;
 import lombok.val;
@@ -16,39 +15,11 @@ public class DataHelper {
     private static final String password = "pass";
 
     @Value
-    public static class AuthInfo {
-        String login;
-        String password;
-    }
-
-    public static AuthInfo getAuthInfo() {
-        return new AuthInfo("vasya", "qwerty123");
-    }
-
-    public static AuthInfo getInvalidLoginForAuth() {
-        Faker faker = new Faker();
-        return new AuthInfo(faker.name().firstName(), "qwerty123");
-    }
-
-    public static AuthInfo getInvalidPasswordForAuth() {
-        Faker faker = new Faker();
-        return new AuthInfo("vasya", faker.internet().password());
-    }
-
-    @Value
     public static class VerificationCode {
         String code;
     }
 
-    public static String invalidPassword() {
-        return "fsdf43f4323f34gf3";
-    }
-
-    public static String getInvalidVerificationCode() {
-        return "765756756756756";
-    }
-
-    public static String getVerificationCodeForVasya() throws SQLException {
+    public static String getVerificationCodeForUser() throws SQLException {
         val verificationCode = "SELECT code FROM auth_codes WHERE created = (SELECT MAX(created) FROM auth_codes);";
 
         try (
