@@ -74,7 +74,9 @@ public class AuthTest {
         val login = "vasya";
         val password = "fsdf43f4323f34gf3";
         loginPage.invalidAuth(login, password);
+        loginPage.clearPasswordField();
         loginPage.sendInvalidPasswordSecondTime(password);
+        loginPage.clearPasswordField();
         loginPage.sendInvalidPasswordThirdTime(password);
     }
 }

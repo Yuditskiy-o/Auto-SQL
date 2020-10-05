@@ -2,6 +2,7 @@ package ru.netology.pages;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.Keys;
 
 import static com.codeborne.selenide.Selenide.$;
 
@@ -34,5 +35,9 @@ public class LoginPage {
         passwordField.setValue(password);
         loginButton.click();
         loginButton.shouldBe(Condition.disabled);
+    }
+
+    public void clearPasswordField() {
+        passwordField.doubleClick().sendKeys(Keys.DELETE);
     }
 }
