@@ -70,7 +70,7 @@ public class AuthTest {
         val authInfo = getInvalidPasswordForAuth();
         loginPage.invalidAuth(authInfo);
         val invalidPassword = invalidPassword();
-        loginPage.sendInvalidPassword(invalidPassword);
-        loginPage.sendInvalidPasswordThreeTimes(invalidPassword);
+        loginPage.sendInvalidPasswordSecondTime(invalidPassword);
+        loginPage.sendInvalidPasswordThirdTime(invalidPassword);
     }
 }

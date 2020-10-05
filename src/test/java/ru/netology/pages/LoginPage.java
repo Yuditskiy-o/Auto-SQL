@@ -26,12 +26,12 @@ public class LoginPage {
         errorNotification.shouldBe(Condition.visible);
     }
 
-    public void sendInvalidPassword(String password) {
+    public void sendInvalidPasswordSecondTime(String password) {
         passwordField.setValue(password);
         loginButton.click();
     }
 
-    public void sendInvalidPasswordThreeTimes(String password) {
+    public void sendInvalidPasswordThirdTime(String password) {
         passwordField.setValue(password);
         loginButton.click();
         loginButton.shouldBe(Condition.disabled);
