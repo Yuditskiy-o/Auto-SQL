@@ -14,15 +14,16 @@ public class VerificationPage {
         codeField.shouldBe(visible);
     }
 
-    public DashboardPage validVerify(String verificationCode) {
+    public void stepsForVerify(String verificationCode) {
         codeField.setValue(verificationCode);
         verifyButton.click();
+    }
+
+    public DashboardPage validVerify() {
         return new DashboardPage();
     }
 
-    public void invalidVerify(String verificationCode) {
-        codeField.setValue(verificationCode);
-        verifyButton.click();
+    public void invalidVerify() {
         error.shouldBe(visible);
     }
 }

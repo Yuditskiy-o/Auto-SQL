@@ -5,13 +5,13 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import ru.netology.data.DataHelper;
 import ru.netology.pages.LoginPage;
 
 import java.sql.SQLException;
 
 import static com.codeborne.selenide.Selenide.open;
-import static ru.netology.data.DataHelper.getVerificationCodeForUser;
+import static ru.netology.data.DataHelper.*;
+import static ru.netology.data.SqlHelper.*;
 
 public class AuthTest {
 
@@ -23,18 +23,19 @@ public class AuthTest {
     @AfterAll
     @DisplayName("Should clean SQL after login")
     public static void cleanDataBase() throws SQLException {
-        DataHelper.cleanDb();
+        cleanDb();
     }
 
     @Test
     @DisplayName("Should login successfully with provided data")
     void shouldEnterWhenValidData() throws SQLException {
         val loginPage = new LoginPage();
-        val login = "vasya";
-        val password = "qwerty123";
-        val verificationPage = loginPage.validAuth(login, password);
-        val verificationCode = getVerificationCodeForUser(login);
-        val dashboardPage = verificationPage.validVerify(verificationCode);
+        val authInfo = getAuthInfo();
+        loginPage.stepsForAuth(authInfo);
+        val verificationPage = loginPage.validAuth();
+        val verificationCode = getVerificationCodeForUser(authInfo);
+        verificationPage.stepsForVerify(verificationCode);
+        val dashboardPage = verificationPage.validVerify();
         dashboardPage.dashboardPage();
     }
 
@@ -42,41 +43,43 @@ public class AuthTest {
     @DisplayName("Should not login if username is invalid")
     void shouldNotEnterWhenInvalidLogin() {
         val loginPage = new LoginPage();
-        val login = "petya";
-        val password = "qwerty123";
-        loginPage.invalidAuth(login, password);
+        val authInfo = getInvalidLoginForAuth();
+        loginPage.stepsForAuth(authInfo);
+        loginPage.invalidAuth();
     }
 
     @Test
     @DisplayName("Should not login if password is invalid")
     void shouldNotEnterWhenInvalidPassword() {
         val loginPage = new LoginPage();
-        val login = "vasya";
-        val password = "423fsf3f3";
-        loginPage.invalidAuth(login, password);
+        val authInfo = getInvalidPasswordForAuth();
+        loginPage.stepsForAuth(authInfo);
+        loginPage.invalidAuth();
     }
 
     @Test
     @DisplayName("Should not login if verification code is invalid")
     void shouldNotEnterWhenInvalidCode() {
         val loginPage = new LoginPage();
-        val login = "vasya";
-        val password = "qwerty123";
-        val verificationPage = loginPage.validAuth(login, password);
-        val verificationCode = "765756756756756";
-        verificationPage.invalidVerify(verificationCode);
+        val authInfo = getAuthInfo();
+        loginPage.stepsForAuth(authInfo);
+        val verificationPage = loginPage.validAuth();
+        val verificationCode = getInvalidVerificationCode();
+        verificationPage.stepsForVerify(verificationCode);
+        verificationPage.invalidVerify();
     }
 
     @Test
     @DisplayName("Should not login if password incorrect 3 times in a row")
     void shouldNotEnterWhenInvalidPasswordThreeTimes() {
         val loginPage = new LoginPage();
-        val login = "vasya";
-        val password = "fsdf43f4323f34gf3";
-        loginPage.invalidAuth(login, password);
+        val authInfo = getInvalidPasswordForAuth();
+        loginPage.stepsForAuth(authInfo);
+        loginPage.invalidAuth();
+        val invalidPassword = invalidPassword();
         loginPage.clearPasswordField();
-        loginPage.sendInvalidPasswordSecondTime(password);
+        loginPage.sendInvalidPasswordSecondTime(invalidPassword);
         loginPage.clearPasswordField();
-        loginPage.sendInvalidPasswordThirdTime(password);
+        loginPage.sendInvalidPasswordThirdTime(invalidPassword);
     }
 }
