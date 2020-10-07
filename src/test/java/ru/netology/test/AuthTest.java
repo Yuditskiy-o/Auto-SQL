@@ -1,18 +1,14 @@
 package ru.netology.test;
 
 import lombok.val;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import ru.netology.pages.LoginPage;
 
 import java.sql.SQLException;
 
 import static com.codeborne.selenide.Selenide.open;
 import static ru.netology.data.DataHelper.*;
-import static ru.netology.data.SqlHelper.cleanDb;
-import static ru.netology.data.SqlHelper.getVerificationCodeForUser;
+import static ru.netology.data.SqlHelper.*;
 
 public class AuthTest {
 
@@ -79,8 +75,9 @@ public class AuthTest {
         loginPage.invalidAuth();
         val invalidPassword = invalidPassword();
         loginPage.clearPasswordField();
-        loginPage.sendInvalidPasswordSecondTime(invalidPassword);
+        loginPage.sendInvalidPassword(invalidPassword);
         loginPage.clearPasswordField();
-        loginPage.sendInvalidPasswordThirdTime(invalidPassword);
+        loginPage.sendInvalidPassword(invalidPassword);
+        loginPage.loginButtonShouldBeDisabled();
     }
 }
