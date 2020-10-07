@@ -9,15 +9,16 @@ import java.sql.SQLException;
 public class SqlHelper {
 
     public static String getVerificationCodeForUser(DataHelper.AuthInfo authInfo) throws SQLException {
+        val login = authInfo.getLogin();
         String userId = null;
-        val searchForId = "SELECT id FROM users WHERE login = ? password = ?;";
+        val searchForId = "SELECT id FROM users WHERE login = ?;";
         try (
                 val conn = DriverManager.getConnection(
                         "jdbc:mysql://192.168.99.100:3306/app", "app", "pass"
                 );
                 val idStmt = conn.prepareStatement(searchForId)
         ) {
-            idStmt.setString(1, String.valueOf(authInfo));
+            idStmt.setString(1, login);
             try (val rs = idStmt.executeQuery()) {
                 if (rs.next()) {
                     // выборка значения по индексу столбца (нумерация с 1)

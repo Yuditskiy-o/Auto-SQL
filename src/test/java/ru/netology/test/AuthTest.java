@@ -11,7 +11,8 @@ import java.sql.SQLException;
 
 import static com.codeborne.selenide.Selenide.open;
 import static ru.netology.data.DataHelper.*;
-import static ru.netology.data.SqlHelper.*;
+import static ru.netology.data.SqlHelper.cleanDb;
+import static ru.netology.data.SqlHelper.getVerificationCodeForUser;
 
 public class AuthTest {
 
