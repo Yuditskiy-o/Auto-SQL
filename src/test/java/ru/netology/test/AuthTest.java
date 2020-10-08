@@ -1,14 +1,16 @@
 package ru.netology.test;
 
 import lombok.val;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import ru.netology.pages.LoginPage;
-
-import java.sql.SQLException;
 
 import static com.codeborne.selenide.Selenide.open;
 import static ru.netology.data.DataHelper.*;
-import static ru.netology.data.SqlHelper.*;
+import static ru.netology.data.SqlHelper.cleanDb;
+import static ru.netology.data.SqlHelper.getVerificationCodeForUser;
 
 public class AuthTest {
 
@@ -19,21 +21,19 @@ public class AuthTest {
 
     @AfterAll
     @DisplayName("Should clean SQL after login")
-    public static void cleanDataBase() throws SQLException {
+    public static void cleanDataBase() {
         cleanDb();
     }
 
     @Test
     @DisplayName("Should login successfully with provided data")
-    void shouldEnterWhenValidData() throws SQLException {
+    void shouldEnterWhenValidData() {
         val loginPage = new LoginPage();
         val authInfo = getAuthInfo();
-        loginPage.stepsForAuth(authInfo);
-        val verificationPage = loginPage.validAuth();
+        val verificationPage = loginPage.validAuth(authInfo);
         val verificationCode = getVerificationCodeForUser(authInfo);
-        verificationPage.stepsForVerify(verificationCode);
-        val dashboardPage = verificationPage.validVerify();
-        dashboardPage.dashboardPage();
+        val dashboardPage = verificationPage.validVerify(verificationCode);
+        dashboardPage.dashboardPageIsVisible();
     }
 
     @Test
@@ -59,8 +59,7 @@ public class AuthTest {
     void shouldNotEnterWhenInvalidCode() {
         val loginPage = new LoginPage();
         val authInfo = getAuthInfo();
-        loginPage.stepsForAuth(authInfo);
-        val verificationPage = loginPage.validAuth();
+        val verificationPage = loginPage.validAuth(authInfo);
         val verificationCode = getInvalidVerificationCode();
         verificationPage.stepsForVerify(verificationCode);
         verificationPage.invalidVerify();
@@ -73,11 +72,10 @@ public class AuthTest {
         val authInfo = getInvalidPasswordForAuth();
         loginPage.stepsForAuth(authInfo);
         loginPage.invalidAuth();
-        val invalidPassword = invalidPassword();
         loginPage.clearPasswordField();
-        loginPage.sendInvalidPassword(invalidPassword);
+        loginPage.sendInvalidPassword(authInfo.getPassword());
         loginPage.clearPasswordField();
-        loginPage.sendInvalidPassword(invalidPassword);
+        loginPage.sendInvalidPassword(authInfo.getPassword());
         loginPage.loginButtonShouldBeDisabled();
     }
 }

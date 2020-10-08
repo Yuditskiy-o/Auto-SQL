@@ -19,7 +19,8 @@ public class VerificationPage {
         verifyButton.click();
     }
 
-    public DashboardPage validVerify() {
+    public DashboardPage validVerify(String verificationCode) {
+        stepsForVerify(verificationCode);
         return new DashboardPage();
     }
 

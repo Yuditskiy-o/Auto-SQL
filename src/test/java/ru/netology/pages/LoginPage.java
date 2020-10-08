@@ -19,7 +19,8 @@ public class LoginPage {
         loginButton.click();
     }
 
-    public VerificationPage validAuth() {
+    public VerificationPage validAuth(DataHelper.AuthInfo info) {
+        stepsForAuth(info);
         return new VerificationPage();
     }
 
